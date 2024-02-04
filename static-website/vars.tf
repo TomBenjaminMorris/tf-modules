@@ -11,6 +11,7 @@ variable "root_domain_zone" {
 variable "allowed_locations" {
   type        = list(string)
   description = "List of allowed countries"
+  default = []
 }
 
 variable "common_tags" {
