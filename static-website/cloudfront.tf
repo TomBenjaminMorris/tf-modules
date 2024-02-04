@@ -1,6 +1,6 @@
 // get cert data block to pass to cert arn value
 data "aws_acm_certificate" "cert" {
-  domain   = var.domain_name
+  domain   = var.root_domain_zone
   provider = aws.use1
   statuses = ["ISSUED"]
 }
