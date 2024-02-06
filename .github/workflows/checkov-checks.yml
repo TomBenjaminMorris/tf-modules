@@ -1,22 +1,22 @@
-# name: Checkov Checks on Terraform Code
+name: Checkov Checks on Terraform Code
    
-# on:
-#   pull_request:
-#     branches:
-#       - master
+on:
+  pull_request:
+    branches:
+      - master
      
-# permissions: read-all
+permissions: read-all
      
-# jobs:
-#   checkov-checks:
-#     runs-on: ubuntu-latest
-#     steps:
+jobs:
+  checkov-checks:
+    runs-on: ubuntu-latest
+    steps:
      
-# # Checkout Repository
-#     - name : Check out Git Repository
-#       uses: actions/checkout@v3
+# Checkout Repository
+    - name : Check out Git Repository
+      uses: actions/checkout@v3
      
-# # Checkov - Prevent cloud misconfigurations and find vulnerabilities during build-time in infrastructure as code
-#     - name: Run Checkov
-#       run: |
-#          docker run -t -v ${{ github.workspace }}:/tf --workdir /tf bridgecrew/checkov --directory /tf --skip-check CKV2_GHA_1
+# Checkov - Prevent cloud misconfigurations and find vulnerabilities during build-time in infrastructure as code
+    - name: Run Checkov
+      run: |
+         docker run -t -v ${{ github.workspace }}:/tf --workdir /tf bridgecrew/checkov --directory /tf --skip-check CKV2_GHA_1
