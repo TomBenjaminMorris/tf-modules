@@ -4,7 +4,7 @@ data "template_file" "www_bucket_policy" {
   template = file("${path.module}/templates/s3-policy.json")
   vars = {
     bucket = aws_s3_bucket.www_bucket.arn
-    dist = aws_cloudfront_distribution.www_s3_distribution.arn
+    dist   = aws_cloudfront_distribution.www_s3_distribution.arn
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_s3_bucket_public_access_block" "www_bucket_public_block" {
 
 resource "aws_s3_bucket" "www_bucket" {
   bucket = "www.${var.domain_name}"
-  tags = var.common_tags
+  tags   = var.common_tags
 }
 
 ############ S3 bucket for redirecting non-www to www ############

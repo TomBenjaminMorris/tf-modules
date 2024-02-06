@@ -11,9 +11,10 @@ variable "root_domain_zone" {
 variable "allowed_locations" {
   type        = list(string)
   description = "List of allowed countries"
-  default = []
+  default     = []
 }
 
 variable "common_tags" {
+  type        = map(string)
   description = "Common tags you want applied to all components."
 }

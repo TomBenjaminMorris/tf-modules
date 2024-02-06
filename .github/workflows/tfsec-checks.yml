@@ -1,0 +1,21 @@
+# name: Tfsec Checks on Terraform Code
+
+# on:
+#   pull_request:
+#     branches:
+#       - master
+      
+# permissions: read-all
+
+# jobs:
+#   tfsec-checks:
+#     runs-on: ubuntu-latest
+#     steps:
+    
+# # Checkout Repository
+#     - name: Check out Git Repository
+#       uses: actions/checkout@v3
+      
+# # Tfsec - Security scanner for your Terraform code
+#     - name: Run Tfsec
+#       uses: aquasecurity/tfsec-action@v1.0.0
