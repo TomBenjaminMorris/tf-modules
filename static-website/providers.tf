@@ -8,7 +8,7 @@ terraform {
     }
 
     template = {
-      source  = "hashcorp/template"
+      source  = "hashicorp/template"
       version = "2.2.0"
     }
   }
