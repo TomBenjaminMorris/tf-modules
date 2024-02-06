@@ -19,7 +19,32 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_response_headers_policy" "www_s3" {
+  name = "${var.project_name}-headers-policy"
+
+  remove_headers_config {
+    items {
+      header   = "server"
+    }
+  }
+
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      override                   = true
+      preload                    = true
+    }
+  }
+}
+
+#tfsec:ignore:aws-cloudfront-enable-waf
+#tfsec:ignore:aws-cloudfront-enable-logging
 resource "aws_cloudfront_distribution" "www_s3_distribution" {
+  #checkov:skip=CKV_AWS_68:No need for WAF
+  #checkov:skip=CKV2_AWS_47:No need for WAF
+  #checkov:skip=CKV_AWS_86:No need for access logging
+  #checkov:skip=CKV_AWS_310:No need for origin failover
   origin {
     domain_name              = aws_s3_bucket.www_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
@@ -36,6 +61,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.www_s3.id
 
     forwarded_values {
       query_string = false
@@ -62,7 +88,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   viewer_certificate {
     acm_certificate_arn      = data.aws_acm_certificate.cert.arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.1_2016"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = var.common_tags
@@ -70,7 +96,34 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
 
 ############ Redirection distribution ############
 
+resource "aws_cloudfront_response_headers_policy" "root_s3" {
+  name = "${var.project_name}-headers-policy-root"
+
+  remove_headers_config {
+    items {
+      header   = "server"
+    }
+  }
+
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      override                   = true
+      preload                    = true
+    }
+  }
+}
+
+#tfsec:ignore:aws-cloudfront-enable-waf
+#tfsec:ignore:aws-cloudfront-enable-logging
 resource "aws_cloudfront_distribution" "root_s3_distribution" {
+  #checkov:skip=CKV_AWS_68:No need for WAF
+  #checkov:skip=CKV2_AWS_47:No need for WAF
+  #checkov:skip=CKV_AWS_86:No need for access logging
+  #checkov:skip=CKV2_AWS_46:No need for origin access control
+  #checkov:skip=CKV_AWS_310:No need for origin failover
+  #checkov:skip=CKV_AWS_305:No need for default root object
   origin {
     domain_name = aws_s3_bucket.root_bucket.website_endpoint
     origin_id   = "S3-.${aws_s3_bucket.root_bucket.bucket}"
@@ -92,6 +145,7 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3-.${aws_s3_bucket.root_bucket.bucket}"
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.root_s3.id
 
     forwarded_values {
       query_string = false
@@ -118,7 +172,7 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
   viewer_certificate {
     acm_certificate_arn      = data.aws_acm_certificate.cert.arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.1_2016"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = var.common_tags
