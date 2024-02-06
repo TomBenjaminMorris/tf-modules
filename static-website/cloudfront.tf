@@ -30,7 +30,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   is_ipv6_enabled     = true
   comment             = "www.${var.domain_name}"
   default_root_object = "index.html"
-  aliases = ["www.${var.domain_name}"]
+  aliases             = ["www.${var.domain_name}"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -83,10 +83,10 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = var.domain_name
-  aliases = [var.domain_name]
+  enabled         = true
+  is_ipv6_enabled = true
+  comment         = var.domain_name
+  aliases         = [var.domain_name]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
