@@ -32,8 +32,26 @@ resource "aws_s3_bucket_public_access_block" "www_bucket_public_block" {
   restrict_public_buckets = true
 }
 
+#tfsec:ignore:aws-s3-encryption-customer-key
+resource "aws_s3_bucket_server_side_encryption_configuration" "www_bucket" {
+  bucket = aws_s3_bucket.www_bucket.id
 
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
+    }
+  }
+}
+
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "www_bucket" {
+  #checkov:skip=CKV2_AWS_62:No need for S3 notifications
+  #checkov:skip=CKV2_AWS_61:No need for S3 lifecycles
+  #checkov:skip=CKV_AWS_144:No need for S3 cross-region replication
+  #checkov:skip=CKV_AWS_21:No need for S3 versioning
+  #checkov:skip=CKV_AWS_145:No need for S3 KMS encryption
+  #checkov:skip=CKV_AWS_18:No need for S3 access logging
   bucket = "www.${var.domain_name}"
   tags   = var.common_tags
 }
@@ -48,7 +66,26 @@ resource "aws_s3_bucket_public_access_block" "root_bucket_public_block" {
   restrict_public_buckets = true
 }
 
+#tfsec:ignore:aws-s3-encryption-customer-key
+resource "aws_s3_bucket_server_side_encryption_configuration" "root_bucket" {
+  bucket = aws_s3_bucket.root_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
+    }
+  }
+}
+
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "root_bucket" {
+  #checkov:skip=CKV2_AWS_62:No need for S3 notifications
+  #checkov:skip=CKV2_AWS_61:No need for S3 lifecycles
+  #checkov:skip=CKV_AWS_144:No need for S3 cross-region replication
+  #checkov:skip=CKV_AWS_21:No need for S3 versioning
+  #checkov:skip=CKV_AWS_145:No need for S3 KMS encryption
+  #checkov:skip=CKV_AWS_18:No need for S3 access logging
   bucket = var.domain_name
   website {
     redirect_all_requests_to = "https://www.${var.domain_name}"
