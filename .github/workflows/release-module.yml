@@ -1,0 +1,27 @@
+name: Release module
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  release-module:
+    runs-on: ubuntu-latest
+    steps:
+
+# Checkout Repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
+
+# Setup git bot config
+    - name: Setup git config
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@users.noreply.github.com"
+
+# Execute release script to bump the version
+    - name: Run release script
+      run: bash ${GITHUB_WORKSPACE}/scripts/release-module.sh static-website patch
