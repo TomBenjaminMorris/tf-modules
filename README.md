@@ -15,6 +15,8 @@ To release a new version of a module, merge the latest changes into `master` the
 * `git tag <module name>-<version>` e.g. `git tag static-website-v0.0.3`
 * `git push origin --tags`
 
+**Note:** The release process should now be automated upon merging into `master`
+
 ## Example usage
 ### Static Website
 Taken from: https://github.com/TomBenjaminMorris/hh_client/blob/master/terraform/main.tf
@@ -39,3 +41,6 @@ module "static-website" {
   common_tags       = local.common_tags
 }
 ```
+## Useful Links
+* https://shadynagy.com/automatically-generate-push-git-tags-github-actions/
+* https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
