@@ -1,0 +1,73 @@
+name: Release module
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  release-module:
+    runs-on: ubuntu-latest
+    steps:
+        
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+          fetch-depth: '0'
+
+    - name: Setup git config
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@users.noreply.github.com"
+
+    - name: Run release script
+      run: bash ${GITHUB_WORKSPACE}/scripts/release-module.sh static-website patch
+
+    # - name: Generate Git Tag
+    #   id: generate_tag
+    #   run: |
+    #     git tag --sort=taggerdate | grep static-web | tail -1
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Release module
+
+# on:
+#   pull_request:
+#     branches:
+#       - master
+      
+# permissions: read-all
+
+# jobs:
+#   release-module:
+#     runs-on: ubuntu-latest
+#     steps:
+
+#     - name: Check out Git Repository
+#       uses: actions/checkout@v4
+
+#     - name: setup git config
+#       run: |
+#         git config user.name "GitHub Actions Bot"
+#         git config user.email "<>"
+#         git tag --list --sort=taggerdate | head -n 1
+    
+#     # - name: test
+#     #   run: |
+#     #     git tag --sort=taggerdate | tail
+
+#     # - name: Run release script
+#     #   run: bash ${GITHUB_WORKSPACE}/scripts/release-module.sh static-website patch
