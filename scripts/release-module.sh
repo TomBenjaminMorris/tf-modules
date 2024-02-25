@@ -10,7 +10,7 @@ else
 fi
 
 #Get current version of module to be released
-current_version_full=`git tag --sort=taggerdate | grep $module | tail -1`
+current_version_full=`git tag --sort=taggerdate | grep $module | sort -V | tail -1`
 if [[ -z "$current_version_full" ]]; then
     echo "Couldn't find version"
     exit 1
