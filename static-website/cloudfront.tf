@@ -38,6 +38,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   #checkov:skip=CKV2_AWS_47:No need for WAF
   #checkov:skip=CKV_AWS_86:No need for access logging
   #checkov:skip=CKV_AWS_310:No need for origin failover
+  #checkov:skip=CKV_AWS_374:Geo restrictions are set at the client level
   origin {
     domain_name              = aws_s3_bucket.www_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
@@ -64,7 +65,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
     response_headers_policy_id = aws_cloudfront_response_headers_policy.www_s3.id
 
     forwarded_values {
-      query_string = false
+      query_string = var.forward_query_string
 
       cookies {
         forward = "none"
@@ -124,6 +125,7 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
   #checkov:skip=CKV2_AWS_46:No need for origin access control
   #checkov:skip=CKV_AWS_310:No need for origin failover
   #checkov:skip=CKV_AWS_305:No need for default root object
+  #checkov:skip=CKV_AWS_374:Geo restrictions are set at the client level
   origin {
     domain_name = aws_s3_bucket.root_bucket.website_endpoint
     origin_id   = "S3-.${aws_s3_bucket.root_bucket.bucket}"
@@ -148,7 +150,7 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
     response_headers_policy_id = aws_cloudfront_response_headers_policy.root_s3.id
 
     forwarded_values {
-      query_string = false
+      query_string = var.forward_query_string
 
       cookies {
         forward = "none"
