@@ -23,3 +23,9 @@ variable "common_tags" {
   type        = map(string)
   description = "Common tags you want applied to all components."
 }
+
+variable "forward_query_string" {
+  type        = bool
+  default     = false
+  description = "Set if the CloudFront distribution should forward query strings."
+}
