@@ -1,7 +1,7 @@
 # tf-modules
 
 Current latest versions:
-* static-website - v0.0.12
+* static-website - v0.0.15
 
 ---
 ## About
